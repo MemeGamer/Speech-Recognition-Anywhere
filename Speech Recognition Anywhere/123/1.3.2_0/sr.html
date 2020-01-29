@@ -1,0 +1,228 @@
+<!doctype html>
+<!--
+ This page is shown when the extension button is clicked, because the
+ "browser_action" field in manifest.json contains the "default_popup" key with
+ value "popup.html".
+ -->
+<html>
+  <head>
+    <title>Speech Recognition Anywhere</title>
+	<link href="sr.css" rel="stylesheet" type="text/css">
+
+    <style>
+    	body
+    	{
+    		min-width: 400px;
+    	}
+    	h1
+    	{
+    		font-size: 1.5em;
+    		-webkit-margin-before:0em;
+			-webkit-margin-after:0em;
+    		margin: 0px;
+    		padding: 2px;
+    		border: 1px solid black;
+    		text-align: center;
+    		cursor: pointer;
+    	}
+    	h1 a
+    	{
+    		text-decoration: none;
+    	}
+    	#title
+		{
+    		vertical-align: top;
+    		color: #000000;
+    		text-decoration: none;
+    	}
+    	p
+    	{
+    		margin: .5em;
+    	}
+    	.button
+    	{
+    		font-size: 1.2em;
+    		border: 2px solid black;
+			border-radius: 10px;
+			padding: 2px;
+			margin: 2px;
+			font-family: "Courier New", Courier, monospace;
+			cursor: pointer;
+    	}
+    	.error
+    	{
+    		color: red;
+    		font-weight: bold;
+    	}
+    	.submenu
+    	{
+    		margin-left: 1em;
+    		background-color: #F0F0F0;
+    		display: none;
+    	}
+    	.subsubmenu
+    	{
+    		margin-left: 1em;
+    		background-color: #F0F0F0;
+    	}
+    	#speech_div
+    	{
+    		border: 1px solid red;
+    		width: 90%;
+    		height: 7em;
+    		overflow: scroll;
+    	}
+    	#sr_sound_level_container
+    	{
+    		border: 1px solid black;
+    		width: 300px;
+    		margin: 1px;
+    		position: absolute;
+    		top: 1em;
+    		left: 1em;
+    	}
+    	#sr_sound_level
+    	{
+    		background-color: #FF0000;
+    		width: 0px;
+    		height: 1em;
+    	}
+    	th
+    	{
+    		background-color: #62B0B0;
+    	}
+    	td
+    	{
+    		border: 1px solid black;
+    		padding: 5px;
+    	}
+    	#custom_commands_div
+    	{
+    		width: 90%;
+    	}
+    	.custom_commands_box
+    	{
+    		border: 1px solid black;
+    		padding: 5px;
+    	}
+    	.custom_commands_box input[type="text"]
+    	{
+    		min-width: 40%;
+    	}
+    	.footer
+    	{
+    		margin-top:1em;
+			height: 3em;
+    		text-align: center;
+    		background-color: #CCCCCC;
+    	}
+    	.footer span
+    	{
+    		display: inline-block;
+			min-width: 25em;
+    		line-height:3em;
+    	}
+
+    </style>
+  </head>
+<body>
+	<h1><a target="_blank" href="https://chrome.google.com/webstore/detail/speech-recognition-anywhe/kdnnmhpmcakdilnofmllgcigkibjonof">
+		<img src="images/microphone38.png"><span class="title" id="title">Speech Recognition Anywhere</span></title></a></h1>
+	<div id="sr_sound_level_container"><div id="sr_sound_level"></div></div>
+	<div class="error" id="error"></div>
+	<div id="sr_msg">Initializing...</div> <!-- Version 1.1.0 - Added "Initializing..." -->
+	<div id="speech_div" contenteditable="true">
+		<span id="final_span"></span>
+		<span id="interim_span" style="color: #666666;"></span>
+	</div>
+	<p><button id="settings_btn" class="submenu_btn" data-menu="settings_div">&#9654; Settings</button>
+	<div id="settings_div" class="submenu">
+		<form name="settings_form">
+			<p><label>Language: <select name="select_language"></select></label>&nbsp;&nbsp;&nbsp;<span id="detected_language"></span>
+			<p><label><input type="checkbox" name="start_with_chrome"> Start "<span class="title"></span>" when Chrome starts</label>
+			<div>
+				<span style='display:table-cell; vertical-align:middle; border: 1px solid black'>
+					<p><label><input type="checkbox" name="start_in_background"> Start "<span class="title"></span>" in the background</label></p>
+					<p><label><input type="checkbox" name="click_to_close"> Click extension icon a second time to close the extension</label></p>
+				</span>
+				<span style='display:table-cell; vertical-align:middle;'>
+					<p><--- Can be used with a shortcut key setup at chrome://extensions/shortcuts</p>
+				</span>
+			</div>
+			<p><label><input type="checkbox" name="submit_search_fields"> Submit search fields automatically</label>
+			<p><label><input type="checkbox" name="pause_for_audio"> Pause "<span class="title"></span>" if audio is playing in a tab</label>
+			<p><label><input type="checkbox" name="virtual_assistant_mode"> Virtual Assistant Mode</label>
+			<div class="subsubmenu">(In Virtual Assistant Mode if this tab is active or a tab with Google is active then speech spoken that is not in the commands list will be sent to "Ok Google" Virtual Assistant.)</div>
+			<p><label><input type="checkbox" name="prevent_system_sleep"> Prevent system from sleeping while "<span class="title"></span>" is listening</label>
+			<div class="subsubmenu">Note: At this time Chrome extensions can't interrupt a screen saver but they can turn the screen back on when
+				power management turns off the screen. So if you want the screen to turn back on with your voice then you will need to disable your
+				screen saver.</div>
+			<p><label><input type="checkbox" name="prevent_display_sleep"> Prevent screen from sleeping while "<span class="title"></span>" is listening</label>
+			<p><label><input type="checkbox" name="use_wakeup_phrase"> Use Voice Activation Wake Up Phrase: </label><input type="text" name="wakeup_phrase"> (Examples: 'Ok Google' or 'Computer')
+			<div class="subsubmenu">
+				<p><label><input type="checkbox" name="wakeup_beep"> Play beep tone when wake up phrase is detected</label>
+				<p><label><input type="checkbox" name="use_wakeup_timeout"> Only require wake up phrase again if there is no speech for more than 20 seconds</label>
+				<p><label><input type="checkbox" name="wakeup_low_beep"> Play low beep tone when looking for wake up phrase again</label>
+				<p><label><input type="checkbox" name="end_beep"> Play beep after speech is detected</label>
+			</div>
+			<p><label><input type="checkbox" name="disable_interim"> Disable yellow speech bubble (Only final speech will display)</label>
+			<p><label><input type="checkbox" name="disable_speech2text"> Disable Speech-To-Text (Only Voice Commands will work)</label>
+			<p><label><input type="checkbox" name="disable_commands"> Disable Voice Commands (Only Speech-To-Text will work)</label>
+			<p><label><input type="checkbox" name="disable_autofocus"> Disable Auto Focus on nearest text box when speech is heard</label>
+			<p><label><input type="checkbox" name="auto_punctuation"> Auto Punctuation</label> - <a href="https://youtu.be/-4X4FsBfsbE" target="_blank">See Instruction Video</a> <!-- Version 1.2.7 -->
+			<p><label><input type="checkbox" name="remove_auto_capitalize"> Remove Google's Auto Capitalization</label>
+			<p><label><input type="checkbox" name="chrome_windows"> Allow Speech Recognition in other Chrome Windows</label>
+
+			<p><b>Text-To-Speech Settings</b>
+			<div class="subsubmenu">
+				<p><label>Voice: <select name="select_voice"></select></label>
+				<p><label>Pitch: <input name="tts_pitch" type="range" value="1" min="0" max="2" step="0.1"><span id="pitch_dis">1</span></label>
+				<p><label>Rate: <input name="tts_rate" type="range" value="1" min="0.1" max="10" step="0.1"><span id="rate_dis">1</span></label> <!-- Version 1.3.2 - Had to change to 10 for Microsoft Voice to save rate -->
+				<p><button name="tts_test_btn">Test</button>
+				<p><label><input type="checkbox" name="tts_highlight"> Highlight text being read</label>
+				<p><label><input type="checkbox" name="tts_scroll"> Scroll to text being read</label>
+				<p><label><input type="checkbox" name="tts_simple"> Simple Mode (Turns off verbose reading of ARIA roles and Tag names like "button" and "hyperlink")</label>
+			</div>
+		</form>
+	</div>
+	<p><button id="instructions_btn" class="submenu_btn" data-menu="instructions_div">&#9654; Instructions</button>
+	<div id="instructions_div" class="submenu">
+		<ol>
+			<li>For speech recognition to work on any page keep this tab open in the background.</li>
+			<li>Switch to any other tab and start talking.</li>
+			<li>To stop speech recognition close this tab.</li>
+		</ol>
+	</div>
+	<p><button id="commands_btn" class="submenu_btn" data-menu="commands_div">&#9654; Commands</button>
+	<div id="commands_div" class="submenu">	</div>
+	<p><button id="custom_commands_btn" class="submenu_btn" data-menu="custom_commands_div">&#9654; Custom Commands</button>
+	<div id="custom_commands_div" class="submenu">
+		<form name='custom_commands_form'>
+		<button name='add1' title='Add Custom Voice Command'>+ Add</button>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		<button name='export' title='Export Custom Commands'>Export</button>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		<button name='import_btn' title='Import Custom Commands'>Import</button>
+		<div style='display:none' id='import_div'>
+		<span><b>Step 1</b><br />
+			<label><input type='radio' name='import_type' value='append' checked>Append to Custom Commands</label><br \>
+			<label><input type='radio' name='import_type' value='overwrite'>Overwrite Custom Commands</label><br \>
+		</span>
+		<span><b>Step 2</b><br />
+			<input name='import_file' type='file' accept='text/plain'>
+			<button name='import_start' title='Start Import'>Start Import</button> <span id='import_error'></span>
+		</span></div>
+
+		<div id="custom_commands_div2"> </div> <!-- This is where the custom commands will print -->
+
+		<button name='add' title='Add Custom Voice Command'>+ Add</button>
+		</form>
+	</div>
+    <script src="storage.js" type="text/javascript"></script>
+    <script src="commands.js" type="text/javascript"></script>
+	<script src="sr.js" type="text/javascript"></script>
+	<script src="languages.js" type="text/javascript"></script>
+	<script src="tts.js" type="text/javascript"></script>
+	<script src="autoPunctuation.js" type="text/javascript"></script>
+</body>
+</html>

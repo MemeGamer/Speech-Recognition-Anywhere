@@ -1,0 +1,38 @@
+{
+   "FREE_TRIAL": {
+      "description": "Free version",
+      "message": "FREE TRIAL"
+   },
+   "FREE_TRIAL_EXPIRED": {
+      "description": "Free version expired",
+      "message": "FREE TRIAL EXPIRED"
+   },
+   "FULL": {
+      "description": "Full version",
+      "message": "FULL"
+   },
+   "Free": {
+      "description": "Free version",
+      "message": "Free"
+   },
+   "appDesc": {
+      "description": "The 132 char description of the application, displayed in the web store.",
+      "message": "Use Voice Recognition to fill out forms and dictate email with speech to text. Control the Internet with custom voice commands!"
+   },
+   "appName": {
+      "description": "The title of the application, displayed in the web store.",
+      "message": "Speech Recognition Anywhere"
+   },
+   "chrome_pages_error": {
+      "message": "NOTE: Google does not allow Chrome extensions to work on special \u003Cb>chrome://\u003C/b> pages or the Chrome Webstore such as the page on the last tab."
+   },
+   "chrome_runtime_error": {
+      "message": ". NOTE: You must reload the web page you were trying to use speech recognition on before this extension will work on it."
+   },
+   "network_error": {
+      "message": "Reinstalling Chrome or doing a Chrome \u003Ca href='https://support.google.com/chrome/answer/3296214'>Reset\u003C/a> may help fix this error."
+   },
+   "speech_recognition_error": {
+      "message": "Speech recognition error detected: "
+   }
+}

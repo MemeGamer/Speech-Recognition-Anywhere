@@ -1,0 +1,34 @@
+{
+   "author": "Varun VP",
+   "background": {
+      "scripts": [ "storage.js", "background.js", "license.js" ]
+   },
+   "browser_action": {
+      "default_icon": "images/microphone38.png",
+      "default_title": "__MSG_appName__"
+   },
+   "content_scripts": [ {
+      "all_frames": true,
+      "css": [  ],
+      "js": [ "storage.js", "content.js", "keypress.js", "googleDocsUtil.js" ],
+      "matches": [ "\u003Call_urls>" ],
+      "run_at": "document_end"
+   } ],
+   "default_locale": "en",
+   "description": "__MSG_appDesc__",
+   "icons": {
+      "128": "images/microphone128.png",
+      "16": "images/microphone16.png",
+      "48": "images/microphone48.png"
+   },
+   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAiEjqvsFz2nJj+93HY51mT7bnM765gZEuv+j9XcoXAfDJmd8AY2KK7o93hnyi1LUbA6ijQHsqziBbSpzppaI5gERSA5o4XeP8SfvazFwMDZMMFLuHNgpw7f1E0Tl7Db27LEPxfrYYPoV9BoOmeQIOSJw78fB06nCtuLvEsew5XVzEvzWJ2RmzcL/+39pZBwYAaRLeYwYHgR7qxpdBYyzk/5kkZ/70QmlKTPJ2Gxrsaam34ENKBswk+WAzu7CkhqoBJgcgOqQHITsZekGwsbxWJwb30Bd103j/zrwDFWicshTDwgKpGUXtVHnunl/K39yiok2GxDqHWX0XzsGFhC5CuQIDAQAB",
+   "manifest_version": 2,
+   "name": "__MSG_appName__",
+   "oauth2": {
+      "client_id": "767741953283-p884ke9l5gavqk2f0a5m7bgjstmvpbm8.apps.googleusercontent.com",
+      "scopes": [ "https://www.googleapis.com/auth/chromewebstore.readonly" ]
+   },
+   "permissions": ["identity", "tabs", "clipboardWrite", "clipboardRead", "storage", "unlimitedStorage", "activeTab", "\u003Call_urls>", "idle", "power" ],
+   "short_name": "Speech Anywh",
+   "version": "1.3.2"
+}
